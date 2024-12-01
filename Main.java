@@ -12,31 +12,42 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Main {
 
   public static void main(String[] args) throws IOException {
 
-    // File path is passed as parameter
-    File file = new File("C:\\Documents\\file_name.txt");
+    File file = new File("C:\\Docs\\advent.txt");
+    BufferedReader br = new BufferedReader(new FileReader(file));
 
-    // Note:  Double backquote is to avoid compiler
-    // interpret words
-    // like \test as \t (ie. as a escape sequence)
+    String line;
+    List<Integer> firstColumn = new ArrayList<>();
+    List<Integer> secondColumn = new ArrayList<>();
 
-    // Creating an object of BufferedReader class
-    BufferedReader br
-        = new BufferedReader(new FileReader(file));
-
-    // Declaring a string variable
-    String st;
-    // Condition holds true till
-    // there is character in a string
-    while ((st = br.readLine()) != null)
-
-    // Print the string
-    {
-      System.out.println(st);
+    while ((line = br.readLine()) != null) {
+      String firstNumber = line.substring(0,5);
+      String secondNumber = line.substring(8,13);
+      firstColumn.add(Integer.valueOf(firstNumber));
+      secondColumn.add(Integer.valueOf(secondNumber));
     }
+
+    Collections.sort(firstColumn);
+    Collections.sort(secondColumn);
+
+    int sumDistance = 0;
+
+    for (int ctr = 0; ctr < firstColumn.size(); ctr++){
+      int firstNumber = firstColumn.get(ctr);
+      int secondNumber = secondColumn.get(ctr);
+
+      sumDistance += Math.abs(firstNumber - secondNumber);
+
+    }
+
+    System.out.println(sumDistance);
+
   }
 }

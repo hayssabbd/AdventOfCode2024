@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -21,10 +23,20 @@ public class Main {
     BufferedReader br = new BufferedReader(new FileReader(file));
 
     String line;
+    Pattern pattern = Pattern.compile("mul\\(\\d+,\\d+\\)");
+    int sum = 0;
 
     while ((line = br.readLine()) != null) {
-      System.out.println(line);
+      Matcher matcher = pattern.matcher(line);
+      while(matcher.find()){
+        String match = matcher.group();
+
+        int firstNumber = Integer.parseInt(match.substring(match.indexOf("(")+1, match.indexOf(",")));
+        int secondNumber = Integer.parseInt(match.substring(match.indexOf(",")+1, match.indexOf(")")));
+        sum += firstNumber * secondNumber;
+      }
     }
+    System.out.println(sum);
   }
 }
 

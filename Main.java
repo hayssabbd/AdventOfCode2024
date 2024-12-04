@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -21,20 +22,24 @@ public class Main {
 
     File file = new File("C:\\Docs\\advent.txt");
     BufferedReader br = new BufferedReader(new FileReader(file));
-
     String line;
-    Pattern pattern = Pattern.compile("mul\\(\\d+,\\d+\\)");
+
+    line = br.lines().collect(Collectors.joining());
+    line = line.replaceAll("\n", "");
+    line = line.replaceAll("don't\\(\\).*?(do\\(\\)|$)", "#");
+
+    Pattern mul = Pattern.compile("mul\\(\\d+,\\d+\\)");
     int sum = 0;
+    Matcher matcher = mul.matcher(line);
 
-    while ((line = br.readLine()) != null) {
-      Matcher matcher = pattern.matcher(line);
-      while(matcher.find()){
-        String match = matcher.group();
+    while (matcher.find()) {
+      String match = matcher.group();
 
-        int firstNumber = Integer.parseInt(match.substring(match.indexOf("(")+1, match.indexOf(",")));
-        int secondNumber = Integer.parseInt(match.substring(match.indexOf(",")+1, match.indexOf(")")));
-        sum += firstNumber * secondNumber;
-      }
+      int firstNumber = Integer.parseInt(
+          match.substring(match.indexOf("(") + 1, match.indexOf(",")));
+      int secondNumber = Integer.parseInt(
+          match.substring(match.indexOf(",") + 1, match.indexOf(")")));
+      sum += firstNumber * secondNumber;
     }
     System.out.println(sum);
   }

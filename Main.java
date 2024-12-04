@@ -34,6 +34,7 @@ public class Main {
     while ((line = br.readLine()) != null) {
       ROWS++;
       COLUMNS = line.length();
+      System.out.println(line);
     }
 
     XMAS_ARRAYS = new String[COLUMNS][ROWS];
@@ -48,144 +49,62 @@ public class Main {
     for(int row = 0; row < ROWS; row++){
       for(int col = 0; col < COLUMNS; col++){
 
-        if(XMAS_ARRAYS[row][col].equals(X)){
-          searchForXmas(row, col);
+        if(XMAS_ARRAYS[row][col].equals(M)){
+          searchForCrossedMas(row, col);
         }
       }
     }
-    System.out.println(XMAS_COUNT);
 
+    //every MAS cross was counted twice so divide by two
+    System.out.println(XMAS_COUNT/2);
   }
 
-  public static void searchForXmas(int row, int col){
-    if(row > 2){
-      searchUpForXmas(row, col);
+  private static void searchForCrossedMas(int row, int col) {
+    if (upRightMas(row, col)) {
+      if(downRightMas(row-2,col)){
+        XMAS_COUNT++;
+      } if(upLeftMas(row, col+2)){
+        XMAS_COUNT++;
+      }
     }
-    if(row > 2 && col < COLUMNS-3){
-      searchUpRightForXmas(row, col);
+    if (downRightMas(row, col)){
+      if(upRightMas(row+2,col)){
+        XMAS_COUNT++;
+      } if(downLeftMas(row, col+2)){
+        XMAS_COUNT++;
+      }
     }
-    if(col < COLUMNS-2){
-      searchRightForXmas(row, col);
+    if (upLeftMas(row,col)){
+      if(upRightMas(row, col-2)){
+        XMAS_COUNT++;
+      } if (downLeftMas(row-2, col)){
+        XMAS_COUNT++;
+      }
     }
-    if(row < ROWS-3 && col < COLUMNS-3){
-      searchDownRightForXmas(row, col);
-    }
-    if(row < ROWS-3){
-      searchDownForXmas(row, col);
-    }
-    if(row < ROWS-3 && col > 2){
-      searchDownLeftForXmas(row, col);
-    }
-    if(col > 2){
-      searchLeftForXmas(row, col);
-    }
-    if(row > 2 && col > 2){
-      searchUpLeftForXmas(row, col);
+    if (downLeftMas(row, col)){
+      if (downRightMas(row, col-2)){
+        XMAS_COUNT++;
+      }  if (upLeftMas(row+2, col)){
+        XMAS_COUNT++;
+      }
     }
   }
 
-  private static void searchUpLeftForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row-1][col-1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row-2][col-2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row-3][col-3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
+  private static boolean downLeftMas(int row, int col) {
+    return (row < ROWS -2 && col > 1 && XMAS_ARRAYS[row][col].equals(M) && XMAS_ARRAYS[row+1][col-1].equals(A) && XMAS_ARRAYS[row+2][col-2].equals(S));
   }
 
-  private static void searchLeftForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row][col-1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row][col-2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row][col-3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
+  private static boolean upLeftMas(int row, int col) {
+    return (row > 1 && col > 1 && XMAS_ARRAYS[row][col].equals(M) && XMAS_ARRAYS[row-1][col-1].equals(A) && XMAS_ARRAYS[row-2][col-2].equals(S));
   }
 
-  private static void searchDownLeftForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row+1][col-1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+2][col-2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+3][col-3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
+  private static boolean downRightMas(int row, int col) {
+    return (row < ROWS-2 && col < COLUMNS-2 && XMAS_ARRAYS[row][col].equals(M) && XMAS_ARRAYS[row+1][col+1].equals(A) && XMAS_ARRAYS[row+2][col+2].equals(S));
   }
 
-  private static void searchDownForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row+1][col].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+2][col].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+3][col].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
+  private static boolean upRightMas(int row, int col) {
+    return ((row > 1 && col < COLUMNS-2) && XMAS_ARRAYS[row][col].equals(M) && XMAS_ARRAYS[row-1][col+1].equals(A) && XMAS_ARRAYS[row-2][col+2].equals(S));
   }
 
-  private static void searchDownRightForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row+1][col+1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+2][col+2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row+3][col+3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
-  }
-
-  private static void searchRightForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row][col+1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row][col+2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row][col+3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
-  }
-
-  private static void searchUpRightForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row-1][col+1].equals(M)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row-2][col+2].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row-3][col+3].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
-  }
-
-  private static void searchUpForXmas(int row, int col) {
-    if(!XMAS_ARRAYS[row-1][col].equals(M)){
-      return;
-    } 
-    if(!XMAS_ARRAYS[row-2][col].equals(A)){
-      return;
-    }
-    if(!XMAS_ARRAYS[row-3][col].equals(S)){
-      return;
-    }
-    XMAS_COUNT++;
-  }
 }
 

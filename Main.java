@@ -12,6 +12,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -22,9 +25,79 @@ public class Main {
 
     String line;
 
+    List<Pair> ruleList = new ArrayList<>();
+
     while ((line = br.readLine()) != null) {
-      System.out.println(line);
+      String[] stringNumbers = line.split("\\|");
+      Pair pair = new Pair(Integer.parseInt(stringNumbers[0]), Integer.parseInt(stringNumbers[1]));
+      ruleList.add(pair);
+    }
+
+    int sum = 0;
+
+    file = new File("C:\\Docs\\advent2.txt");
+    br = new BufferedReader(new FileReader(file));
+    boolean correct;
+    while ((line = br.readLine()) != null) {
+      int[] update = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray();
+      correct = true;
+      for (int ctr = 1; ctr < update.length; ctr++) {
+        int firstPage = update[ctr];
+        for (int search = 0; search < ctr; search++) {
+          if (search != ctr) {
+            int secondPage = update[search];
+            for (Pair pair : ruleList) {
+              if (pair.firstPage == firstPage && pair.secondPage == secondPage) {
+                correct = false;
+                break;
+              }
+            }
+            if (!correct) {
+              break;
+            }
+          }
+        }
+        if (!correct) {
+          break;
+        }
+      }
+      if (correct) {
+        int middleNumber = update[update.length / 2];
+        sum += middleNumber;
+      }
+    }
+
+    System.out.println(sum);
+
+  }
+
+  private static class Pair {
+
+    public int firstPage;
+    public int secondPage;
+
+    public Pair(int firstPage, int secondPage) {
+      this.firstPage = firstPage;
+      this.secondPage = secondPage;
+    }
+
+    public int getFirstPage() {
+      return firstPage;
+    }
+
+    public void setFirstPage(int firstPage) {
+      this.firstPage = firstPage;
+    }
+
+    public int getSecondPage() {
+      return secondPage;
+    }
+
+    public void setSecondPage(int secondPage) {
+      this.secondPage = secondPage;
     }
   }
+
+
 }
 

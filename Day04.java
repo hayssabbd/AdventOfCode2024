@@ -52,6 +52,7 @@ public class Day04 {
         countVerticalSamx(grid) + countDiagonalRightXmas(grid) + countDiagonalRightSamx(grid) +
         countDiagonaLeftXmas(grid) + countDiagonaLeftSamx(grid);
     System.out.println("XMAS count = " + count);
+    System.out.println("X'ed MAS count = " + countMas(grid));
   }
 
   public int countHorizontalXmas(char[][] grid) {
@@ -204,6 +205,49 @@ public class Day04 {
     }
     System.out.println("Diagonal Left XMAS = " + count);
     return count;
+  }
+
+  public int countMas(char[][] grid) {
+    int count = 0;
+    for (int i = 0; i < 140; i++) {
+      for (int j = 0; j < 140; j++) {
+        if (grid[i][j] == 'A') {
+          if (isDiagonalLeftMas(grid, i, j) && isDiagonalRightMas(grid, i, j)) {
+            count++;
+          }
+        }
+      }
+    }
+    System.out.println("X'ed MAS = " + count);
+    return count;
+  }
+
+  public boolean isDiagonalRightMas(char[][] grid, int i, int j) {
+    boolean x = false;
+    if (i-1 >= 0 && j-1 >= 0 && grid[i-1][j-1] == 'M') {
+      if (i+1 < 140 && j+1 < 140 && grid[i+1][j+1] == 'S') {
+        x = true;
+      }
+    } else if (i-1 >= 0 && j-1 >= 0 && grid[i-1][j-1] == 'S') {
+      if (i+1 < 140 && j+1 < 140 && grid[i+1][j+1] == 'M') {
+        x = true;
+      }
+    }
+    return x;
+  }
+
+  public boolean isDiagonalLeftMas(char[][] grid, int i, int j) {
+    boolean x = false;
+    if (i+1 < 140 && j-1 >= 0 && grid[i+1][j-1] == 'M') {
+      if (i-1 >= 0 && j+1 < 140 && grid[i-1][j+1] == 'S') {
+        x = true;
+      }
+    } else if (i+1 < 140 && j-1 >= 0 && grid[i+1][j-1] == 'S') {
+      if (i-1 >= 0 && j+1 < 140 && grid[i-1][j+1] == 'M') {
+        x = true;
+      }
+    }
+    return x;
   }
 
   public static void main(String[] args) {

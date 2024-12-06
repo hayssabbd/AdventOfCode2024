@@ -38,17 +38,23 @@ public class Main {
     file = new File("C:\\Docs\\advent2.txt");
     br = new BufferedReader(new FileReader(file));
     boolean correct;
+    boolean originallyCorrect;
     while ((line = br.readLine()) != null) {
       int[] update = Arrays.stream(line.split(",")).mapToInt(Integer::parseInt).toArray();
-      correct = true;
-      for (int ctr = 1; ctr < update.length; ctr++) {
-        int firstPage = update[ctr];
-        for (int search = 0; search < ctr; search++) {
-          if (search != ctr) {
+      correct = false;
+      originallyCorrect = true;
+      while (!correct) {
+        correct = true;
+        for (int ctr = 1; ctr < update.length; ctr++) {
+          int firstPage = update[ctr];
+          for (int search = 0; search < ctr; search++) {
             int secondPage = update[search];
             for (Pair pair : ruleList) {
               if (pair.firstPage == firstPage && pair.secondPage == secondPage) {
                 correct = false;
+                originallyCorrect = false;
+                update[ctr] = secondPage;
+                update[search] = firstPage;
                 break;
               }
             }
@@ -56,14 +62,14 @@ public class Main {
               break;
             }
           }
-        }
-        if (!correct) {
-          break;
+          if (!correct) {
+            break;
+          }
         }
       }
-      if (correct) {
+      if(!originallyCorrect){
         int middleNumber = update[update.length / 2];
-        sum += middleNumber;
+        sum+= middleNumber;
       }
     }
 
